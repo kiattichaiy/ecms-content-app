@@ -69,6 +69,7 @@ import { SearchResultsRowComponent } from './components/search/search-results-ro
 import { BulkActionsDropdownComponent } from './components/bulk-actions-dropdown/bulk-actions-dropdown.component';
 import { AgentsButtonComponent } from './components/knowledge-retrieval/search-ai/agents-button/agents-button.component';
 import { SaveSearchSidenavComponent } from './components/search/search-save/sidenav/save-search-sidenav.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   imports: [ContentModule.forRoot(), AppStoreModule, HammerModule],
@@ -93,6 +94,7 @@ import { SaveSearchSidenavComponent } from './components/search/search-save/side
       components: {
         'app.layout.main': ShellLayoutComponent,
         'app.layout.sidenav': SidenavComponent,
+        'app.dashboard': DashboardComponent,
         'app.shell.sibling': UploadFilesDialogComponent,
         'app.components.tabs.metadata': MetadataTabComponent,
         'app.components.tabs.library.metadata': LibraryMetadataTabComponent,

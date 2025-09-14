@@ -23,8 +23,8 @@
     "scope": "openid",
     "secret": "",
     "implicitFlow": false,
-    "codeFlow": true,
-    "silentLogin": true,
+    "codeFlow": false,
+    "silentLogin": false,
     "publicUrls": ["**/preview/s/*", "**/settings"],
     "redirectSilentIframeUri": "{protocol}//{hostname}{:port}/assets/silent-refresh.html",
     "redirectUri": "/",
@@ -34,7 +34,7 @@
   },
   "locale": "en",
   "application": {
-    "name": "Workspace",
+    "name": "Enterprise Content Management",
     "version": "7.1.0",
     "logo": "assets/images/app-logo.svg",
     "copyright": "APP.COPYRIGHT"

@@ -146,8 +146,17 @@
         "id": "app.navbar.primary",
         "items": [
           {
+            "id": "app.navbar.dashboard",
+            "order": 50,
+            "icon": "dashboard",
+            "title": "APP.BROWSE.DASHBOARD.SIDENAV_LINK.LABEL",
+            "description": "APP.BROWSE.DASHBOARD.SIDENAV_LINK.TOOLTIP",
+            "route": "dashboard"
+          },
+          {
             "id": "app.navbar.menu",
             "order": 100,
+            "icon": "folder_open",
             "title": "APP.BROWSE.FILE.SIDENAV_LINK.LABEL",
             "description": "APP.BROWSE.FILE.SIDENAV_LINK.TOOLTIP",
             "data": {
@@ -157,6 +166,7 @@
               {
                 "id": "app.navbar.personalFiles",
                 "order": 100,
+                "icon": "folder",
                 "title": "APP.BROWSE.PERSONAL.SIDENAV_LINK.LABEL",
                 "description": "APP.BROWSE.PERSONAL.SIDENAV_LINK.TOOLTIP",
                 "route": "personal-files"
@@ -164,6 +174,7 @@
               {
                 "id": "app.navbar.libraries.files",
                 "order": 200,
+                "icon": "corporate_fare",
                 "title": "APP.BROWSE.LIBRARIES.MENU.MY_LIBRARIES.SIDENAV_LINK.LABEL",
                 "description": "APP.BROWSE.LIBRARIES.MENU.MY_LIBRARIES.SIDENAV_LINK.TOOLTIP",
                 "route": "libraries"
@@ -171,6 +182,7 @@
               {
                 "id": "app.navbar.libraries.favorite",
                 "order": 300,
+                "icon": "favorite",
                 "title": "APP.BROWSE.LIBRARIES.MENU.FAVORITE_LIBRARIES.SIDENAV_LINK.LABEL",
                 "description": "APP.BROWSE.LIBRARIES.MENU.FAVORITE_LIBRARIES.SIDENAV_LINK.TOOLTIP",
                 "route": "favorite/libraries"
@@ -178,6 +190,7 @@
               {
                 "id": "app.navbar.recentFiles",
                 "order": 400,
+                "icon": "access_time",
                 "title": "APP.BROWSE.RECENT.SIDENAV_LINK.LABEL",
                 "description": "APP.BROWSE.RECENT.SIDENAV_LINK.TOOLTIP",
                 "route": "recent-files"
@@ -185,6 +198,7 @@
               {
                 "id": "app.navbar.favorites",
                 "order": 500,
+                "icon": "star",
                 "title": "APP.BROWSE.FAVORITES.SIDENAV_LINK.LABEL",
                 "description": "APP.BROWSE.FAVORITES.SIDENAV_LINK.TOOLTIP",
                 "route": "favorites"
@@ -192,6 +206,7 @@
               {
                 "id": "app.navbar.shared",
                 "order": 600,
+                "icon": "share",
                 "title": "APP.BROWSE.SHARED.SIDENAV_LINK.LABEL",
                 "description": "APP.BROWSE.SHARED.SIDENAV_LINK.TOOLTIP",
                 "route": "shared"
@@ -199,6 +214,7 @@
               {
                 "id": "app.navbar.trashcan",
                 "order": 700,
+                "icon": "delete",
                 "title": "APP.BROWSE.TRASHCAN.SIDENAV_LINK.LABEL",
                 "description": "APP.BROWSE.TRASHCAN.SIDENAV_LINK.TOOLTIP",
                 "route": "trashcan"

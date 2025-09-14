@@ -1,0 +1,531 @@
+/*!
+ * Copyright © 2005-2025 Hyland Software, Inc. and its affiliates. All rights reserved.
+ *
+ * Alfresco Example Content Application
+ *
+ * This file is part of the Alfresco Example Content Application.
+ * If the software was purchased under a paid Alfresco license, the terms of
+ * the paid license agreement will prevail. Otherwise, the software is
+ * provided under the following open source license terms:
+ *
+ * The Alfresco Example Content Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * The Alfresco Example Content Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * from Hyland Software. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// Follow the same pattern as working pages (Favorites, Files)
+// Let the natural flexbox layout from page-layout component handle scrolling
+
+// Dashboard grid layout (col-sm-4; col-sm-4; col-sm-4)
+.aca-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 32px;
+  margin: 0;
+  align-items: start;
+
+  // Responsive behavior
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+}
+
+.aca-grid-item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.aca-grid-full-width {
+  grid-column: 1 / -1;
+  margin-top: 32px;
+}
+
+// Dashboard section optimized sizing
+.aca-dashboard-section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 280px; // Reduced minimum height for compact layout
+
+  // Full-width sections (like Recent Activities) should be taller
+  &.aca-grid-full-width {
+    min-height: 350px;
+  }
+}
+
+// Enhanced footer styling
+.aca-page-layout-footer {
+  border-top: 1px solid var(--theme-border-color, #e0e0e0);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 16px 32px;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.aca-footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.aca-footer-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--theme-text-secondary, #6c757d);
+}
+
+// Enhanced section titles with uniform styling
+.aca-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--theme-text-primary, #212529);
+  margin: 0 0 20px;
+  position: relative;
+  padding: 20px 24px 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+  }
+}
+
+// Table-based layout with framed containers
+.aca-table-container {
+  background: var(--theme-background-card, #fff);
+  border: 1px solid var(--theme-border-color, #e9ecef);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  flex: 1; // Allow table to expand to fill available space
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// Common table styles for both stats and activity tables
+.aca-stats-table,
+.aca-activity-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  flex: 1;
+  display: table;
+  table-layout: fixed; // Ensure consistent column widths
+
+  thead {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid var(--theme-primary-200, #bbdefb);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--theme-text-primary, #212529);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      border-right: 1px solid var(--theme-border-color, #e9ecef);
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid var(--theme-border-color, #e9ecef);
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: var(--theme-background-hover, #f8f9fa);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:nth-child(even) {
+        background: rgba(0, 0, 0, 0.015);
+      }
+    }
+
+    td {
+      padding: 12px 16px;
+      vertical-align: middle;
+      border-right: 1px solid var(--theme-border-color, #f0f0f0);
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+}
+
+// Column proportions for stats tables with optimized sizing
+.aca-col-icon {
+  width: 50px;
+  text-align: center;
+  padding: 12px 8px !important;
+}
+
+.aca-col-label {
+  width: 140px;
+  font-weight: 500;
+  color: var(--theme-text-secondary, #6c757d);
+  padding: 12px 12px !important;
+  word-wrap: break-word;
+}
+
+.aca-col-value {
+  width: auto;
+  font-weight: 600;
+  color: var(--theme-text-primary, #212529);
+  text-align: right;
+  padding: 12px 16px !important;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+}
+
+// Column proportions for activity table with optimized spacing
+.aca-col-activity {
+  width: auto;
+  padding: 12px 16px !important;
+}
+
+.aca-col-user {
+  width: 140px;
+  color: var(--theme-text-secondary, #6c757d);
+  padding: 12px 16px !important;
+  font-weight: 500;
+}
+
+.aca-col-time {
+  width: 120px;
+  color: var(--theme-text-secondary, #6c757d);
+  font-size: 12px;
+  text-align: right;
+  padding: 12px 16px !important;
+  font-family: 'Roboto Mono', monospace;
+}
+
+// Activity display with consistent formatting
+.aca-activity-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 2px 0;
+}
+
+.aca-activity-title {
+  font-weight: 600;
+  color: var(--theme-text-primary, #212529);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.aca-activity-detail {
+  font-size: 12px;
+  color: var(--theme-text-secondary, #6c757d);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+  font-style: italic;
+}
+
+// Table row styling with consistent alternating pattern
+.aca-table-row {
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+
+  &:nth-child(even) {
+    background: rgba(102, 126, 234, 0.02);
+  }
+
+  &:hover {
+    border-left-color: var(--theme-primary-500, #1976d2);
+    background: rgba(102, 126, 234, 0.05) !important;
+  }
+}
+
+// Optimized icon styling for compact appearance
+.aca-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: var(--theme-primary-600, #1976d2);
+  background: var(--theme-primary-50, #e3f2fd);
+  margin: 0 auto;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+
+  &:hover {
+    transform: scale(1.05);
+    border-color: var(--theme-primary-200, #bbdefb);
+  }
+
+  // Status-based colors with compact sizing
+  &.aca-status-excellent,
+  &.aca-status-good {
+    color: var(--theme-success-600, #2e7d32);
+    background: var(--theme-success-50, #e8f5e8);
+  }
+
+  &.aca-status-fair,
+  &.aca-status-warning {
+    color: var(--theme-warning-600, #ed6c02);
+    background: var(--theme-warning-50, #fff3e0);
+  }
+
+  &.aca-status-critical,
+  &.aca-status-high,
+  &.aca-status-alert {
+    color: var(--theme-error-600, #d32f2f);
+    background: var(--theme-error-50, #ffebee);
+  }
+
+  &.aca-status-normal {
+    color: var(--theme-success-600, #2e7d32);
+    background: var(--theme-success-50, #e8f5e8);
+  }
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.aca-activity-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--theme-primary-100, #e3f2fd);
+  color: var(--theme-primary-600, #1976d2);
+  border-radius: 6px;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+// Loading and refresh functionality styles
+.aca-dashboard-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+  margin-right: 16px;
+
+  button {
+    color: var(--theme-text-secondary, #6c757d);
+
+    &:hover {
+      color: var(--theme-primary-600, #1976d2);
+    }
+  }
+}
+
+.aca-last-updated {
+  font-size: 12px;
+  color: var(--theme-text-secondary, #adb5bd);
+  font-weight: 400;
+}
+
+.aca-spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.aca-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+
+  p {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--theme-text-secondary, #6c757d);
+    font-weight: 500;
+  }
+}
+
+.aca-main-content.aca-loading {
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+// Custom pagination component styling
+.aca-pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid var(--theme-border-color, #e0e0e0);
+  background: var(--theme-background-card, #f8f9fa);
+  font-size: 14px;
+  min-height: 56px;
+
+  .aca-pagination-info {
+    color: var(--theme-text-secondary, #6c757d);
+    font-weight: 500;
+  }
+
+  .aca-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .aca-pagination-size {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--theme-text-secondary, #6c757d);
+    min-width: 150px;
+    white-space: nowrap;
+
+    .aca-page-size-select {
+      min-width: 70px;
+      font-size: 14px;
+
+      .mat-mdc-select-trigger {
+        height: 32px;
+        padding: 0 8px;
+      }
+
+      .mat-mdc-select-value {
+        font-size: 14px;
+        line-height: 32px;
+      }
+    }
+  }
+
+  .aca-pagination-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .aca-page-info {
+      color: var(--theme-text-primary, #212529);
+      font-weight: 500;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    button {
+      width: 36px;
+      height: 36px;
+      color: var(--theme-primary-600, #1976d2);
+
+      &:disabled {
+        color: var(--theme-text-disabled, #bdbdbd);
+      }
+
+      &:hover:not(:disabled) {
+        background: var(--theme-primary-50, #e3f2fd);
+      }
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  // Responsive behavior
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+
+    .aca-pagination-controls {
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .aca-pagination-info {
+      text-align: center;
+    }
+  }
+}
+
+// Pagination styling for Recent Activities
+.aca-grid-full-width {
+  adf-pagination {
+    margin-top: 16px;
+    padding: 0 24px 16px;
+    border-top: 1px solid var(--theme-border-color, #e9ecef);
+    background: var(--theme-background-card, #fff);
+    border-radius: 0 0 12px 12px;
+  }
+}

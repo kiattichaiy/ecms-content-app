@@ -22,6 +22,7 @@
  * from Hyland Software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FilesComponent } from './components/files/files.component';
 import { LibrariesComponent } from './components/libraries/libraries.component';
 import { FavoriteLibrariesComponent } from './components/favorite-libraries/favorite-libraries.component';
@@ -113,6 +114,13 @@ export const CONTENT_LAYOUT_ROUTES: Route[] = [
         path: 'profile',
         canActivate: [ViewProfileRuleGuard],
         component: ViewProfileComponent
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        data: {
+          title: 'APP.BROWSE.DASHBOARD.TITLE'
+        }
       },
       {
         path: '',

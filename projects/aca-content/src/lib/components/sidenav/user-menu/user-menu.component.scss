@@ -1,17 +1,30 @@
 .aca-user-menu {
   .aca-user-menu-button {
-    border-radius: 90%;
-    height: 32px;
+    border-radius: 8px;
+    height: 36px;
     margin-right: 0;
-    min-width: 32px;
-    width: 32px;
+    min-width: 36px;
+    width: 36px;
     padding: 0;
-    font-weight: 700;
-    line-height: 32px;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 36px;
     text-align: center;
     vertical-align: middle;
-    background: var(--theme-about-panel-border-color);
-    color: var(--theme-sidenav-user-menu-color);
-    border: none;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      background: #e5e7eb;
+      border-color: #d1d5db;
+      transform: scale(1.02);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
   }
 }

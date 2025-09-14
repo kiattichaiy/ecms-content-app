@@ -1,0 +1,248 @@
+<aca-page-layout>
+  <div class="aca-page-layout-header">
+    <aca-search-ai-input-container
+      *ngIf="searchAiInputState.active; else header"
+      [agentId]="searchAiInputState.selectedAgentId" />
+    <ng-template #header>
+      <div class="aca-header-container">
+        <h1 class="aca-page-title">
+          {{ (selectedRowItemsCount < 1 ? 'APP.BROWSE.DASHBOARD.TITLE' : 'APP.HEADER.SELECTED') | translate: { count: selectedRowItemsCount } }}
+        </h1>
+        <div class="aca-dashboard-controls">
+          <button mat-icon-button
+                  (click)="loadDashboardData()"
+                  [disabled]="isLoading"
+                  title="Refresh Dashboard">
+            <mat-icon [class.aca-spinning]="isLoading">refresh</mat-icon>
+          </button>
+          <span class="aca-last-updated">Last updated: {{ lastUpdated | date:'short' }}</span>
+        </div>
+        <aca-toolbar [items]="actions" />
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="aca-page-layout-content aca-scrollable">
+    <!-- Loading Overlay -->
+    <div class="aca-loading-overlay" *ngIf="isLoading">
+      <mat-spinner diameter="50" />
+      <p>Loading dashboard data...</p>
+    </div>
+
+    <div class="aca-main-content" [class.aca-loading]="isLoading">
+      <div class="aca-dashboard-grid">
+        <!-- Repository Information Section -->
+        <div class="aca-dashboard-section aca-grid-item">
+          <h2 class="aca-section-title">{{ 'APP.BROWSE.DASHBOARD.REPOSITORY_INFO' | translate }}</h2>
+          <div class="aca-table-container">
+            <table class="aca-stats-table">
+              <thead>
+                <tr>
+                  <th class="aca-col-icon"></th>
+                  <th class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.METRIC' | translate }}</th>
+                  <th class="aca-col-value">{{ 'APP.BROWSE.DASHBOARD.VALUE' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="aca-table-row">
+                  <td class="aca-col-icon">
+                    <mat-icon class="aca-stat-icon">info</mat-icon>
+                  </td>
+                  <td class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.PRODUCT_NAME' | translate }}</td>
+                  <td class="aca-col-value">{{ getRepositoryName() }}</td>
+                </tr>
+                <tr class="aca-table-row">
+                  <td class="aca-col-icon">
+                    <mat-icon class="aca-stat-icon">label</mat-icon>
+                  </td>
+                  <td class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.VERSION' | translate }}</td>
+                  <td class="aca-col-value">{{ getRepositoryVersion() }}</td>
+                </tr>
+                <tr class="aca-table-row">
+                  <td class="aca-col-icon">
+                    <mat-icon class="aca-stat-icon">speed</mat-icon>
+                  </td>
+                  <td class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.API_RESPONSE_TIME' | translate }}</td>
+                  <td class="aca-col-value">{{ apiResponseTime || 0 }}ms</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Content Statistics Section -->
+        <div class="aca-dashboard-section aca-grid-item">
+          <h2 class="aca-section-title">{{ 'APP.BROWSE.DASHBOARD.CONTENT_STATISTICS' | translate }}</h2>
+          <div class="aca-table-container">
+            <table class="aca-stats-table">
+              <thead>
+                <tr>
+                  <th class="aca-col-icon"></th>
+                  <th class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.METRIC' | translate }}</th>
+                  <th class="aca-col-value">{{ 'APP.BROWSE.DASHBOARD.VALUE' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="aca-table-row">
+                  <td class="aca-col-icon">
+                    <mat-icon class="aca-stat-icon">description</mat-icon>
+                  </td>
+                  <td class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.TOTAL_FILES' | translate }}</td>
+                  <td class="aca-col-value">{{ contentStats?.totalFiles || 0 }}</td>
+                </tr>
+                <tr class="aca-table-row">
+                  <td class="aca-col-icon">
+                    <mat-icon class="aca-stat-icon">folder</mat-icon>
+                  </td>
+                  <td class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.TOTAL_FOLDERS' | translate }}</td>
+                  <td class="aca-col-value">{{ contentStats?.totalFolders || 0 }}</td>
+                </tr>
+                <tr class="aca-table-row">
+                  <td class="aca-col-icon">
+                    <mat-icon class="aca-stat-icon">library_books</mat-icon>
+                  </td>
+                  <td class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.TOTAL_SITES' | translate }}</td>
+                  <td class="aca-col-value">{{ contentStats?.totalSites || 0 }}</td>
+                </tr>
+                <tr class="aca-table-row">
+                  <td class="aca-col-icon">
+                    <mat-icon class="aca-stat-icon">star</mat-icon>
+                  </td>
+                  <td class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.TOTAL_FAVORITES' | translate }}</td>
+                  <td class="aca-col-value">{{ contentStats?.totalFavorites || 0 }}</td>
+                </tr>
+                <tr class="aca-table-row">
+                  <td class="aca-col-icon">
+                    <mat-icon class="aca-stat-icon">link</mat-icon>
+                  </td>
+                  <td class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.SHARED_LINKS' | translate }}</td>
+                  <td class="aca-col-value">{{ contentStats?.sharedLinks || 0 }}</td>
+                </tr>
+                <tr class="aca-table-row">
+                  <td class="aca-col-icon">
+                    <mat-icon class="aca-stat-icon">delete</mat-icon>
+                  </td>
+                  <td class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.TRASHCAN_ITEMS' | translate }}</td>
+                  <td class="aca-col-value">{{ contentStats?.trashcanItems || 0 }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- File Type Distribution Section -->
+        <div class="aca-dashboard-section aca-grid-item">
+          <h2 class="aca-section-title">{{ 'APP.BROWSE.DASHBOARD.FILE_TYPES' | translate }}</h2>
+          <div class="aca-table-container">
+            <table class="aca-stats-table">
+              <thead>
+                <tr>
+                  <th class="aca-col-icon"></th>
+                  <th class="aca-col-label">{{ 'APP.BROWSE.DASHBOARD.FILE_TYPE' | translate }}</th>
+                  <th class="aca-col-value">{{ 'APP.BROWSE.DASHBOARD.COUNT' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="aca-table-row" *ngFor="let fileType of fileTypeStats">
+                  <td class="aca-col-icon">
+                    <mat-icon class="aca-stat-icon">{{ getFileTypeIcon(fileType.type) }}</mat-icon>
+                  </td>
+                  <td class="aca-col-label">{{ fileType.type }}</td>
+                  <td class="aca-col-value">{{ fileType.count }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Activities Section -->
+        <div class="aca-dashboard-section aca-grid-item aca-grid-full-width">
+          <h2 class="aca-section-title">{{ 'APP.BROWSE.DASHBOARD.RECENT_ACTIVITIES' | translate }}</h2>
+          <div class="aca-table-container">
+            <table class="aca-activity-table">
+              <thead>
+                <tr>
+                  <th class="aca-col-icon"></th>
+                  <th class="aca-col-activity">{{ 'APP.BROWSE.DASHBOARD.ACTIVITY' | translate }}</th>
+                  <th class="aca-col-user">{{ 'APP.BROWSE.DASHBOARD.USER' | translate }}</th>
+                  <th class="aca-col-time">{{ 'APP.BROWSE.DASHBOARD.TIME' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="aca-table-row" *ngFor="let activity of paginatedActivities">
+                  <td class="aca-col-icon">
+                    <mat-icon class="aca-activity-icon">{{ getActivityIcon(activity.type) }}</mat-icon>
+                  </td>
+                  <td class="aca-col-activity">
+                    <div class="aca-activity-info">
+                      <span class="aca-activity-title">{{ activity.action }}</span>
+                      <span class="aca-activity-detail" *ngIf="activity.fileName">{{ activity.fileName }}</span>
+                    </div>
+                  </td>
+                  <td class="aca-col-user">{{ activity.userName }}</td>
+                  <td class="aca-col-time">{{ activity.timestamp | date:'short' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Custom Pagination for Recent Activities -->
+          <div class="aca-pagination-container">
+            <div class="aca-pagination-info">
+              <span>{{ getPageRangeText() }} of {{ activitiesTotalItems }} items</span>
+            </div>
+
+            <div class="aca-pagination-controls">
+              <!-- Page size selector -->
+              <div class="aca-pagination-size">
+                <span>Items per page:</span>
+                <mat-select
+                  [value]="activitiesPageSize"
+                  (selectionChange)="onPageSizeChange($event.value)"
+                  class="aca-page-size-select">
+                  <mat-option [value]="5">5</mat-option>
+                  <mat-option [value]="10">10</mat-option>
+                  <mat-option [value]="15">15</mat-option>
+                  <mat-option [value]="25">25</mat-option>
+                </mat-select>
+              </div>
+
+              <!-- Navigation controls -->
+              <div class="aca-pagination-nav">
+                <button
+                  mat-icon-button
+                  [disabled]="activitiesCurrentPage === 1"
+                  (click)="goToPreviousPage()"
+                  title="Previous page">
+                  <mat-icon>chevron_left</mat-icon>
+                </button>
+
+                <span class="aca-page-info">
+                  Page {{ activitiesCurrentPage }} of {{ getTotalPages() }}
+                </span>
+
+                <button
+                  mat-icon-button
+                  [disabled]="activitiesCurrentPage === getTotalPages()"
+                  (click)="goToNextPage()"
+                  title="Next page">
+                  <mat-icon>chevron_right</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="aca-sidebar" *ngIf="infoDrawerOpened$ | async">
+      <aca-info-drawer [node]="selection.last" />
+    </div>
+  </div>
+
+  <div class="aca-page-layout-footer">
+    <div class="aca-footer-content">
+      <span class="aca-footer-text">Dashboard Summary: {{ getTotalItemsCount() }} total items</span>
+    </div>
+  </div>
+</aca-page-layout>
