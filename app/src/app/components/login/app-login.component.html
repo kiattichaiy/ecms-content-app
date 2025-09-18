@@ -1,7 +1,17 @@
-<adf-login
-  [copyrightText]="settings.appCopyright | translate"
-  successRoute="/personal-files"
-  logoImageUrl="./assets/images/alfresco-logo.svg"
-  backgroundImageUrl="./assets/images/Wallpaper-BG-generic.svg"
-  [showRememberMe]="false"
-  [showLoginActions]="false" />
+<!-- Background Circles -->
+<div class="app-bg-circle-1"></div>
+<div class="app-bg-circle-2"></div>
+
+<!-- Login Card -->
+<div class="app-login-card">
+  <main>
+    <div class="app-form-container">
+      <adf-login
+        [copyrightText]="settings.appCopyright | translate"
+        successRoute="/personal-files"
+        backgroundImageUrl=""
+        [showRememberMe]="false"
+        [showLoginActions]="false" />
+    </div>
+  </main>
+</div>

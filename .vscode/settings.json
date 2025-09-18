@@ -16,5 +16,6 @@
   "stylelint.validate": [
     "css",
     "scss"
-  ]
+  ],
+  "nxConsole.generateAiAgentRules": true
 }
