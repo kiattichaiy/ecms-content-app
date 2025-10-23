@@ -1,9 +1,10 @@
 const { BASE_URL } = process.env;
-console.log('Using backend URL: ' + (BASE_URL || 'unknown'));
+const backendUrl = BASE_URL || 'http://localhost:8080';
+console.log('Using backend URL: ' + backendUrl);
 
 module.exports = {
   '/alfresco': {
-    target: BASE_URL,
+    target: backendUrl,
     secure: false,
     pathRewrite: {
       '^/alfresco/alfresco': ''
@@ -11,7 +12,7 @@ module.exports = {
     changeOrigin: true,
     onProxyReq: (request) => {
       if (request['method'] !== 'GET') {
-        request.setHeader('origin', BASE_URL);
+        request.setHeader('origin', backendUrl);
       }
     }
   }

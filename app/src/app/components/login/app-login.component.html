@@ -1,17 +1,130 @@
-<!-- Background Circles -->
-<div class="app-bg-circle-1"></div>
-<div class="app-bg-circle-2"></div>
+<!-- Unified Background -->
+<div class="app-login-background">
+  <div class="app-gradient-overlay"></div>
+  <div class="app-floating-shapes">
+    <div class="app-shape app-shape-1"></div>
+    <div class="app-shape app-shape-2"></div>
+    <div class="app-shape app-shape-3"></div>
+  </div>
+</div>
 
-<!-- Login Card -->
-<div class="app-login-card">
-  <main>
-    <div class="app-form-container">
-      <adf-login
-        [copyrightText]="settings.appCopyright | translate"
-        successRoute="/personal-files"
-        backgroundImageUrl=""
-        [showRememberMe]="false"
-        [showLoginActions]="false" />
+<!-- Main Wrapper with Grid -->
+<div class="app-login-wrapper">
+  <div>
+    <!-- Left Side: Login Form -->
+    <div class="app-login-section">
+      <div class="app-login-content">
+        
+        <!-- Logo -->
+        <div class="app-logo-container">
+          <div class="app-logo-circle">
+            <img src="assets/images/alfresco-logo.svg" alt="Alfresco" class="app-logo-img" />
+          </div>
+        </div>
+
+        <!-- Welcome Text -->
+        <div class="app-welcome-text">
+          <h1>Welcome Back</h1>
+          <p>Sign in to your Enterprise Content Management</p>
+        </div>
+
+        <!-- Error Alert -->
+        <div class="app-error-alert" *ngIf="errorMessage">
+          <mat-icon>error_outline</mat-icon>
+          <div class="app-error-content">
+            <strong>Authentication Failed</strong>
+            <span>{{ errorMessage }}</span>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="app-login-form">
+          
+          <!-- Username -->
+          <div class="app-form-field">
+            <label>Username</label>
+            <div class="app-input-wrapper">
+              <mat-icon class="app-field-icon">person_outline</mat-icon>
+              <input
+                type="text"
+                formControlName="username"
+                placeholder="Enter your username"
+                autocomplete="username"
+              />
+            </div>
+            <span class="app-field-error" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+              <mat-icon>info_outline</mat-icon>
+              {{ loginForm.get('username')?.hasError('required') ? 'Username is required' : 'Username must be at least 2 characters' }}
+            </span>
+          </div>
+
+          <!-- Password -->
+          <div class="app-form-field">
+            <label>Password</label>
+            <div class="app-input-wrapper">
+              <mat-icon class="app-field-icon">lock_outline</mat-icon>
+              <input
+                [type]="hidePassword ? 'password' : 'text'"
+                formControlName="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+              />
+              <button type="button" class="app-password-toggle" (click)="togglePasswordVisibility()" tabindex="-1">
+                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+            </div>
+            <span class="app-field-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+              <mat-icon>info_outline</mat-icon>
+              Password is required
+            </span>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="app-submit-btn" [disabled]="isLoading" [class.loading]="isLoading">
+            <span *ngIf="!isLoading" class="app-btn-text">
+              Sign In
+              <mat-icon>arrow_forward</mat-icon>
+            </span>
+            <span *ngIf="isLoading" class="app-btn-loading">
+              <mat-spinner diameter="20"></mat-spinner>
+              <span>Signing in...</span>
+            </span>
+          </button>
+        </form>
+
+        <!-- Footer -->
+        <div class="app-copyright">
+          <p>{{ settings.appCopyright | translate }}</p>
+        </div>
+      </div>
     </div>
-  </main>
+
+    <!-- Right Side: Info Panel -->
+    <div class="app-info-section">
+      <div class="app-info-content">
+        
+        <div class="app-info-icon">
+          <mat-icon>cloud_done</mat-icon>
+        </div>
+        
+        <h2>Enterprise Content Management</h2>
+        <p>Secure, scalable, and intelligent content services platform</p>
+        
+        <div class="app-features-list">
+          <div class="app-feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Secure Document Management</span>
+          </div>
+          <div class="app-feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Real-time Collaboration</span>
+          </div>
+          <div class="app-feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Intelligent Process Automation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

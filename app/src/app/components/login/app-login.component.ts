@@ -22,20 +22,89 @@
  * from Hyland Software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Component, inject, ViewEncapsulation } from '@angular/core';
-import { AppSettingsService } from '@alfresco/aca-shared';
-import { LoginModule } from '@alfresco/adf-core';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslateModule } from '@ngx-translate/core';
+import { AuthenticationService } from '@alfresco/adf-core';
+import { AppSettingsService } from '@alfresco/aca-shared';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   templateUrl: './app-login.component.html',
   styleUrls: ['./app-login.component.scss'],
-  imports: [CommonModule, LoginModule, TranslateModule],
-  schemas: [],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    TranslateModule
+  ]
 })
-export class AppLoginComponent {
+export class AppLoginComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthenticationService);
+  private router = inject(Router);
   settings = inject(AppSettingsService);
+
+  loginForm!: FormGroup;
+  isLoading = false;
+  errorMessage = '';
+  hidePassword = true;
+
+  ngOnInit() {
+    this.loginForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(2)]],
+      password: ['', Validators.required]
+    });
+
+    // Check if already logged in
+    if (this.authService.isLoggedIn()) {
+      void this.router.navigate(['/personal-files']);
+    }
+  }
+
+  onSubmit() {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const { username, password } = this.loginForm.value;
+
+    this.authService.login(username, password, true).subscribe({
+      next: () => {
+        this.isLoading = false;
+        void this.router.navigate(['/personal-files']);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Login error:', error);
+
+        if (error.status === 403) {
+          this.errorMessage = 'Invalid username or password';
+        } else {
+          this.errorMessage = 'An error occurred during login. Please try again.';
+        }
+      }
+    });
+  }
+
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
+  }
 }
