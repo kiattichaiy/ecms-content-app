@@ -17,5 +17,8 @@
     "css",
     "scss"
   ],
-  "nxConsole.generateAiAgentRules": true
+  "nxConsole.generateAiAgentRules": true,
+  "search.exclude": {
+    "**/node_modules": false
+  }
 }

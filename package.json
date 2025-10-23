@@ -4,6 +4,11 @@
   "license": "LGPL-3.0",
   "scripts": {
     "start": "nx serve content-ce",
+    "start:adf": "npm run watch:adf & npm start",
+    "watch:adf": "npm run build:adf -- --watch",
+    "build:adf": "cd ../alfresco-ng2-components && npm run build:libs",
+    "rebuild:adf": "cd ../alfresco-ng2-components && npm run build:libs && cd ../ecms-content-app",
+    "setup:adf": "node scripts/setup-adf-dev.js",
     "start:prod": "node --max-old-space-size=8192 nx serve content-ce --configuration production",
     "build": "nx build content-ce",
     "build.release": "npm run build -- --configuration=production,release",
@@ -33,8 +38,7 @@
     "ci:licenses": "adf-cli licenses -d docs/licences",
     "ci:changelog": "adf-cli changelog -o docs/changelog --exclude=\"bot\\|Alfresco Build User\\|alfresco-build\"",
     "ci:check-env": "adf-cli check-cs-env --host $BASE_URL -u $ADMIN_EMAIL -p $ADMIN_PASSWORD"
-  }
-,
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Alfresco/alfresco-content-app.git"
@@ -65,7 +69,9 @@
     "@ngrx/store": "19.2.1",
     "@ngrx/store-devtools": "19.2.1",
     "@ngx-translate/core": "^16.0.4",
+    "buffer": "^6.0.3",
     "date-fns": "^4.1.0",
+    "event-emitter": "^0.3.5",
     "katex": "^0.16.21",
     "material-icons": "^1.13.12",
     "mermaid": "^11.10.1",
@@ -95,7 +101,7 @@
     "@nx/workspace": "21.4.1",
     "@playwright/test": "^1.55.0",
     "@reportportal/agent-js-playwright": "^5.1.9",
-    "@types/event-emitter": "^0.3.3",
+    "@types/event-emitter": "^0.3.5",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "^2.0.8",
     "@types/node": "18.19.9",
@@ -115,6 +121,7 @@
     "eslint-plugin-prettier": "5.5.4",
     "eslint-plugin-rxjs": "^5.0.2",
     "eslint-plugin-unicorn": "^54.0.0",
+    "events": "^3.3.0",
     "husky": "^9.0.11",
     "jasmine-core": "~4.6.0",
     "jasmine-spec-reporter": "~5.0.0",
@@ -129,10 +136,13 @@
     "node-stream-zip": "^1.14.0",
     "nx": "21.5.2",
     "prettier": "3.5.3",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
     "stylelint": "^15.11.0",
     "stylelint-config-standard-scss": "^7.0.1",
     "ts-node": "^10.9.2",
     "typescript": "5.8.2",
+    "util": "^0.12.5",
     "webpack-bundle-analyzer": "^4.10.2"
   }
 }

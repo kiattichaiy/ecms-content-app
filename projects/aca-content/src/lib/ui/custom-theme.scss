@@ -6,6 +6,7 @@
 @import './overrides/adf-about.theme';
 @import './colors';
 
+// Force rebuild - updated timestamp
 $mat-primary-palette: mat.m2-define-palette($aca-primary-blue, A100);
 $mat-accent-palette: mat.m2-define-palette($aca-accent-green, A200);
 $mat-warn-palette: mat.m2-define-palette($aca-warn, A100);
