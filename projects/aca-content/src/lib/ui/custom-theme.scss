@@ -1,7 +1,7 @@
 /* stylelint-disable value-keyword-case */
 @use '@angular/material' as mat;
 @use '@mat-datetimepicker/core/datetimepicker/datetimepicker-theme' as datetimepicker-theme;
-@import './overrides/adf-style-fixes.theme';
+@use './overrides/adf-style-fixes.theme' as *;
 @import './overrides/adf-pagination.theme';
 @import './overrides/ay11';
 @import './overrides/adf-about.theme';

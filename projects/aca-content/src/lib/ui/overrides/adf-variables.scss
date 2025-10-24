@@ -101,5 +101,6 @@
     }
   }
 
-  @include adf-core.globals;
+  // Removed undefined mixin include that caused compile error
+  // @include adf-core.globals();
 }
